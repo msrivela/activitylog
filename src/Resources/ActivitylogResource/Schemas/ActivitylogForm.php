@@ -4,6 +4,7 @@ namespace Rmsramos\Activitylog\Resources\ActivitylogResource\Schemas;
 
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ViewField;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -72,6 +73,18 @@ class ActivitylogForm
                         ->placeholder('-'),
 
                 ]),
+
+                Section::make(__('activitylog::forms.fields.properties.label'))
+                    ->schema([
+                        ViewField::make('properties')
+                            ->formatStateUsing(function ($state, ?Model $record) {
+                                /** @var Activity|null $record */
+                                return $record?->properties?->toArray() ?? [];
+                            })
+                            ->view('activitylog::filament.tables.columns.activity-logs-properties')
+                            ->label(__('activitylog::forms.fields.properties.label')),
+
+                    ]),
             ]);
     }
 }
