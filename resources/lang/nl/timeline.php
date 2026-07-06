@@ -1,4 +1,5 @@
 <?php
+
 return [
     'title' => [
         'modifiedTitle' => 'De <strong>%s</strong> is <strong>%s</strong> door <strong>%s</strong>. <br><small> Geupdate om: <strong>%s</strong></small>',

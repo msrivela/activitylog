@@ -1,4 +1,5 @@
 <?php
+
 return [
     'title' => [
         'modifiedTitle' => '<strong>%s</strong> tika <strong>%s</strong> ar lietotāju <strong>%s</strong>. <br><small> Atjaunots: <strong>%s</strong></small>',

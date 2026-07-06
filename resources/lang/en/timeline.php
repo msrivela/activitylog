@@ -1,4 +1,5 @@
 <?php
+
 return [
     'title' => [
         'modifiedTitle' => 'The <strong>%s</strong> was <strong>%s</strong> by <strong>%s</strong>. <br><small> Updated at: <strong>%s</strong></small>',

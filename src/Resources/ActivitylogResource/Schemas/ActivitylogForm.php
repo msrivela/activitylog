@@ -1,11 +1,14 @@
 <?php
 
+namespace Rmsramos\Activitylog\Resources\ActivitylogResource\Schemas;
+
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Rmsramos\Activitylog\ActivitylogPlugin;
 
 class ActivitylogForm
@@ -24,7 +27,7 @@ class ActivitylogForm
                     TextInput::make('subject_type')
                         ->afterStateHydrated(function ($component, ?Model $record, $state) {
                             /** @var Activity $record */
-                            return $state ? $component->state(Str::of($state)->afterLast('\\')->headline().' # '.$record->subject_id) : $component->state('-');
+                            return $state ? $component->state(Str::of($state)->afterLast('\\')->headline() . ' # ' . $record->subject_id) : $component->state('-');
                         })
                         ->label(__('activitylog::forms.fields.subject_type.label')),
 
@@ -36,32 +39,38 @@ class ActivitylogForm
 
                 Section::make([
                     TextEntry::make('log_name')
-                        ->content(function (?Model $record): string {
-                            /** @var Activity $record */
-                            return $record?->log_name ? ucwords($record->log_name) : '-';
+                        ->state(function (?Model $record): string {
+                            /** @var Activity|null $record */
+                            return $record?->log_name
+                                ? ucwords($record->log_name)
+                                : '-';
                         })
                         ->label(__('activitylog::forms.fields.log_name.label')),
 
                     TextEntry::make('event')
-                        ->content(function (?Model $record): string {
-                            /** @var Activity $record */
-                            return $record?->event ? ucwords(__('activitylog::action.event.'.$record->event)) : '-';
+                        ->state(function (?Model $record): string {
+                            /** @var Activity|null $record */
+                            return $record?->event
+                                ? ucwords(__('activitylog::action.event.' . $record->event))
+                                : '-';
                         })
                         ->label(__('activitylog::forms.fields.event.label')),
 
                     TextEntry::make('created_at')
                         ->label(__('activitylog::forms.fields.created_at.label'))
-                        ->content(function (?Model $record): string {
-                            /** @var Activity $record */
+                        ->state(function (?Model $record): ?string {
+                            /** @var Activity|null $record */
                             if (! $record?->created_at) {
-                                return '-';
+                                return null;
                             }
 
                             $parser = ActivitylogPlugin::get()->getDateParser();
 
                             return $parser($record->created_at)
                                 ->format(ActivitylogPlugin::get()->getDatetimeFormat());
-                        }),
+                        })
+                        ->placeholder('-'),
+
                 ]),
             ]);
     }

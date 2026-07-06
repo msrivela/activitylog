@@ -1,4 +1,5 @@
 <?php
+
 return [
     'columns' => [
         'log_name' => [

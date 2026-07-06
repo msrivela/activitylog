@@ -1,4 +1,5 @@
 <?php
+
 return [
     'fields' => [
         'log_name' => [
